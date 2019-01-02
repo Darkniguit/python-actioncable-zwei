@@ -105,15 +105,43 @@ class Connection:
             return
 
         self.websocket.send(json.dumps(data))
+"""
+Deleted 'socket' from:
 
-    def _on_open(self, socket):
+def _on_open(self, socket):
+def _on_message(self, socket, message):
+def _on_close(self, socket):
+
+Since there's no use to it; the function was specting a 'socket' that never was passed to it, so you get an error:
+
+def _on_open(self, socket): ->
+
+ERROR:websocket:error from callback <bound method Connection._on_open of <actioncable.connection.Connection object at 0x7fa0f3861668>>: _on_open() missing 1 required positional argument: 'socket'
+  File "/usr/local/lib/python3.6/dist-packages/websocket/_app.py", line 343, in _callback
+    callback(*args)
+
+def _on_message(self, socket, message): (this say there's no 'message'; but the message is taking the place of the 'socket' argument) ->
+
+ERROR:websocket:error from callback <bound method Connection._on_message of <actioncable.connection.Connection object at 0x7fa0f3861668>>: _on_message() missing 1 required positional argument: 'message'
+  File "/usr/local/lib/python3.6/dist-packages/websocket/_app.py", line 343, in _callback
+    callback(*args)
+
+def _on_close(self, socket): ->
+
+ERROR:websocket:error from callback <bound method Connection._on_close of <actioncable.connection.Connection object at 0x7fa0f3861668>>: _on_close() missing 1 required positional argument: 'socket'
+
+
+"""
+        
+        
+    def _on_open(self):
         """
         Called when the connection is open.
         """
         self.logger.debug('Connection established.')
 
 
-    def _on_message(self, socket, message):
+    def _on_message(self, message):
         """
         Called aways when a message arrives.
         """
@@ -146,7 +174,7 @@ class Connection:
         else:
             self.logger.warning('Message not supported. (Message: {})'.format(message))
 
-    def _on_close(self, socket):
+    def _on_close(self):
         """
         Called when the connection was closed.
         """
